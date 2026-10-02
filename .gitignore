@@ -1,0 +1,15 @@
+# Generated data (recreated by running the pipeline)
+data/raw/
+*.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# Editors / OS
+.vscode/
+.DS_Store
+Thumbs.db
