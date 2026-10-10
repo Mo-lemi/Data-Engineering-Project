@@ -4,6 +4,8 @@ A small ETL pipeline that downloads daily historical weather data for five South
 
 > Status: in development.
 
+Verification code: WTC-6RAQMRKQ
+
 ## Demo video
 
 _Coming soon._
