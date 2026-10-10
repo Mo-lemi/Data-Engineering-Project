@@ -32,6 +32,15 @@ def download_city_csv(city):
     return path
 
 
+def extract_all():
+    """Download every city in config.CITIES and return the saved file paths."""
+    paths = []
+    for city in config.CITIES:
+        path = download_city_csv(city)
+        print(f"Saved {city['name']:<13} -> {path}")
+        paths.append(path)
+    return paths
+
+
 if __name__ == "__main__":
-    # Day 2: try a single city first so we can inspect the file format.
-    print("Saved", download_city_csv(config.CITIES[0]))
+    extract_all()
