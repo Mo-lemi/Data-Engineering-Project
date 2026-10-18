@@ -32,4 +32,5 @@ _Coming soon._
 
 - **Settings in one place (`config.py`).** Cities, coordinates and the date range live in one file, so changing what the pipeline fetches never means editing the pipeline code.
 - **Extract saves files unchanged.** The extract step only downloads and saves. All cleaning happens in transform, so if a cleaning rule is wrong it can be fixed and re-run without downloading again. (Open-Meteo snaps each city to the nearest point on its weather grid, so the stored coordinates differ slightly from those in `config.py`.)
+- **Cleaning removes bad rows instead of fixing them.** Transform drops duplicate days, days with any missing measurement, and impossible values (min temperature above max, negative rain or wind). Guessing a replacement value would invent data. Removing a few rows from about 1,800 per city barely affects averages. The current data has none of these problems, but the rules protect future downloads, and `tests/test_transform.py` proves each rule works.
 - **Raw data is not committed.** Downloaded CSVs and the database are generated files and can always be recreated by running the pipeline, so `.gitignore` excludes them.

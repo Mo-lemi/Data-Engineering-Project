@@ -25,10 +25,26 @@ def read_city_csv(path, city_name):
     return df
 
 
+def clean_weather(df):
+    """Remove duplicate, incomplete and physically impossible rows."""
+    # One row per city per day; this matches the primary key the database will enforce.
+    df = df.drop_duplicates(subset=["city", "date"], keep="first")
+
+    # A day with a missing measurement would skew averages, so drop it entirely.
+    df = df.dropna()
+
+    # Values that cannot happen in real weather point to bad data, not unusual weather.
+    impossible = (
+        (df["temp_min_c"] > df["temp_max_c"])
+        | (df["precipitation_mm"] < 0)
+        | (df["wind_max_kmh"] < 0)
+    )
+    df = df[~impossible]
+
+    return df.reset_index(drop=True)
+
+
 if __name__ == "__main__":
-    df = read_city_csv("data/raw/johannesburg.csv", "Johannesburg")
-    print(df.head())
-    print()
-    print(df.dtypes)
-    print()
-    print(len(df), "rows")
+    raw = read_city_csv("data/raw/johannesburg.csv", "Johannesburg")
+    clean = clean_weather(raw)
+    print(len(raw), "rows read,", len(raw) - len(clean), "removed,", len(clean), "kept")
