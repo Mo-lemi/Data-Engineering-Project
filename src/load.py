@@ -37,6 +37,32 @@ def load_cities(conn, cities=config.CITIES):
         conn.executemany(sql, cities)
 
 
+def load_daily_weather(conn, df):
+    """Insert cleaned daily rows, replacing any row already stored for the same city and day."""
+    # The DataFrame has city names; the table needs city ids, so look them up from cities.
+    city_ids = dict(conn.execute("SELECT name, city_id FROM cities"))
+    df = df.copy()
+    df["city_id"] = df["city"].map(city_ids)
+    if df["city_id"].isna().any():
+        raise ValueError("Some rows belong to a city that is not in the cities table")
+    df["date"] = df["date"].dt.strftime("%Y-%m-%d")
+
+    # Same upsert idea as load_cities: re-running replaces rows instead of duplicating them.
+    sql = """
+        INSERT INTO daily_weather
+            (city_id, date, temp_max_c, temp_min_c, precipitation_mm, wind_max_kmh)
+        VALUES
+            (:city_id, :date, :temp_max_c, :temp_min_c, :precipitation_mm, :wind_max_kmh)
+        ON CONFLICT (city_id, date) DO UPDATE SET
+            temp_max_c       = excluded.temp_max_c,
+            temp_min_c       = excluded.temp_min_c,
+            precipitation_mm = excluded.precipitation_mm,
+            wind_max_kmh     = excluded.wind_max_kmh
+    """
+    with conn:
+        conn.executemany(sql, df.to_dict("records"))
+
+
 if __name__ == "__main__":
     conn = connect()
     create_tables(conn)
