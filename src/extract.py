@@ -33,12 +33,12 @@ def download_city_csv(city):
 
 
 def extract_all():
-    """Download every city in config.CITIES and return the saved file paths."""
-    paths = []
+    """Download every city in config.CITIES and return {city name: saved file path}."""
+    paths = {}
     for city in config.CITIES:
         path = download_city_csv(city)
         print(f"Saved {city['name']:<13} -> {path}")
-        paths.append(path)
+        paths[city["name"]] = path
     return paths
 
 
