@@ -26,7 +26,15 @@ Open-Meteo CSV ──► extract ──► data/raw/*.csv ──► transform �
 
 ## How to run
 
-_Coming soon._
+Requires Python 3.11+ (the minimum for pandas 3).
+
+```
+pip install -r requirements.txt
+python pipeline.py        # downloads, cleans and loads everything into weather.db
+python -m pytest          # runs the cleaning-rule tests
+```
+
+Running the pipeline again is safe: it refreshes the data without creating duplicates.
 
 ## Design decisions
 
