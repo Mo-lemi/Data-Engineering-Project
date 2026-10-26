@@ -2,13 +2,13 @@
 
 A small ETL pipeline that downloads daily historical weather data for five South African cities, cleans it with pandas, loads it into a SQLite database, and answers a few questions with SQL.
 
-> Status: in development.
+> Status: Complete.
 
 Verification code: WTC-6RAQMRKQ
 
 ## Demo video
 
-_Coming soon._
+https://youtu.be/4ZBasPoD8vI
 
 ## Data source
 
